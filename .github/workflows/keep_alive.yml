@@ -1,0 +1,16 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: '0 0 * * 1,4' # ПН и ЧТ в 00:00 UTC
+  workflow_dispatch:      # Кнопка для ручного запуска
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping DB
+        run: |
+          curl -i -X GET "${{ secrets.SUPABASE_URL }/rest/v1/documents?select=id&limit=1" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
